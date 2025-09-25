@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.test1.model.Board;
 import com.example.test1.model.Student;
 
 @Mapper
-public interface StudentMapper {
-	
-	Student studentInfo (HashMap<String, Object> map);
-	List <Student> stuList (HashMap<String, Object> map);
+public interface BoardMapper {
+
+	List <Board> boardList (HashMap<String, Object> map);
 	
 	
 }

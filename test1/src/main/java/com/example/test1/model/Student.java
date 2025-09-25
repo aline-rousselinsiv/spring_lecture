@@ -5,6 +5,8 @@ public class Student {
 	private String stuName;
 	private String stuDept;
 	private String stuGrade;
+	
+	private String stuGender;
 	public String getStuNo() {
 		return stuNo;
 	}
@@ -16,6 +18,9 @@ public class Student {
 	}
 	public String getStuGrade() {
 		return stuGrade;
+	}
+	public String getStuGender() {
+		return stuGender;
 	}
 	
 }

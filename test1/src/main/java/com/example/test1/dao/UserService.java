@@ -24,6 +24,8 @@ public class UserService {
 			System.out.println(user.getNickName());
 			
 		}
+		resultMap.put("info", user);
+		resultMap.put("result", "success");
 		return resultMap;
 	}
 }
