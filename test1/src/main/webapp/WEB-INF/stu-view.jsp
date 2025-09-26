@@ -11,23 +11,17 @@
         table, tr, td, th{
             border : 1px solid black;
             border-collapse: collapse;
-            padding : 10px 20px;
+            padding : 5px 10px;
             text-align: center;
+            height: 50px;
         }
         th{
             background-color: beige;
+            width: 100px;
         }
         td {
-            width: 250px;
+            width: 150px;
         }
-        textarea {
-            height: 150px;
-            width: 250px;
-        }
-        input {
-            width: 250px;
-        }
-
     </style>
 </head>
 <body>
@@ -36,26 +30,23 @@
          <div>
             <table>
                 <tr>
-                    <th>제목</th>
-                    <td>
-                        <input type="text" v-model="title">
-                    </td>
+                    <th>이름</th>
+                    <td>{{info.stuName}}</td>
                 </tr>
                 <tr>
-                    <th>작성자</th>
-                    <td>
-                        <input type="text" v-model="userid">
-                    </td>
+                    <th>학과</th>
+                    <td>{{info.stuDept}}</td>
                 </tr>
                 <tr>
-                    <th>내용</th>
-                    <td>
-                        <textarea v-model="contents"></textarea>
-                    </td>
+                    <th>시험평균점수</th>
+                    <td>{{info.avgGrade}}</td>
                 </tr>
             </table>
-            <button @click="fnAdd">등록</button>
          </div>
+         <div>
+            <button @click="fnEdit">수정</button>
+         </div>
+         
     </div>
 </body>
 </html>
@@ -65,35 +56,36 @@
         data() {
             return {
                 // 변수 - (key : value)
-                title : "",
-                userid : "",
-                contents : ""
+                stuNo : "${stuNo}",
+                info : {}
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnAdd: function(){
+            fnInfo: function () {
                 let self = this;
                 let param = {
-                    title : self.title,
-                    userid : self.userid,
-                    contents : self.contents
-                }
+                    stuNo : self.stuNo
+                };
                 $.ajax({
-                    url: "board-add.dox",
+                    url: "stu-view.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert("등록되었습니다!");
-                        location.href="board-list.do";
+                        console.log(data);
+                        self.info = data.info;
                     }
                 });
+            },
+            fnEdit: function(){
+                pageChange("stu-edit.do", {stuNo : stuNo});
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            self.fnInfo();
         }
     });
 

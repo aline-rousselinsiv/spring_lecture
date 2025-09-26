@@ -49,4 +49,15 @@ public class StudentService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> getStudentView(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println("service => " + map);
+		Student info = studentMapper.studentView(map);
+		
+		resultMap.put("info", info);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
 }

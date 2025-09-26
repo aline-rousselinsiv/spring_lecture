@@ -11,51 +11,20 @@
         table, tr, td, th{
             border : 1px solid black;
             border-collapse: collapse;
-            padding : 10px 20px;
+            padding : 5px 10px;
             text-align: center;
         }
         th{
             background-color: beige;
         }
-        td {
-            width: 250px;
+        tr:nth-child(even){
+            background-color: azure;
         }
-        textarea {
-            height: 150px;
-            width: 250px;
-        }
-        input {
-            width: 250px;
-        }
-
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-         <div>
-            <table>
-                <tr>
-                    <th>제목</th>
-                    <td>
-                        <input type="text" v-model="title">
-                    </td>
-                </tr>
-                <tr>
-                    <th>작성자</th>
-                    <td>
-                        <input type="text" v-model="userid">
-                    </td>
-                </tr>
-                <tr>
-                    <th>내용</th>
-                    <td>
-                        <textarea v-model="contents"></textarea>
-                    </td>
-                </tr>
-            </table>
-            <button @click="fnAdd">등록</button>
-         </div>
     </div>
 </body>
 </html>
@@ -65,28 +34,20 @@
         data() {
             return {
                 // 변수 - (key : value)
-                title : "",
-                userid : "",
-                contents : ""
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnAdd: function(){
+            fnList: function () {
                 let self = this;
-                let param = {
-                    title : self.title,
-                    userid : self.userid,
-                    contents : self.contents
-                }
+                let param = {};
                 $.ajax({
-                    url: "board-add.dox",
+                    url: "",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert("등록되었습니다!");
-                        location.href="board-list.do";
+
                     }
                 });
             }

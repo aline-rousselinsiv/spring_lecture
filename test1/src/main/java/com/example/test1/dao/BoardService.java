@@ -38,9 +38,18 @@ public class BoardService {
 	public HashMap<String, Object> addBoardList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		List <Board> list = boardMapper.boardAdd(map);
+		int cnt = boardMapper.boardAdd(map);
+
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> getBoard(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Board info = boardMapper.selectBoard(map);
 		
-		resultMap.put("list", list);
+		resultMap.put("info", info);
 		resultMap.put("result", "success");
 		return resultMap;
 	}

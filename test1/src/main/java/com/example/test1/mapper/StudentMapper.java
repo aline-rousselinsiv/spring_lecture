@@ -16,4 +16,6 @@ public interface StudentMapper {
 	
 	int stuDelete (HashMap<String, Object> map);
 	
+	Student studentView (HashMap<String, Object> map);
+	
 }
