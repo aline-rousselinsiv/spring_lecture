@@ -24,4 +24,25 @@ public class BoardService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> removeBoard(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int cnt = boardMapper.deleteBoard(map);
+		
+		resultMap.put("result", "success");
+		return resultMap;
+		
+	}
+	
+	public HashMap<String, Object> addBoardList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List <Board> list = boardMapper.boardAdd(map);
+		
+		resultMap.put("list", list);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	
 }

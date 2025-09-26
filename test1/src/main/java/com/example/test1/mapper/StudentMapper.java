@@ -11,7 +11,9 @@ import com.example.test1.model.Student;
 public interface StudentMapper {
 	
 	Student studentInfo (HashMap<String, Object> map);
+	
 	List <Student> stuList (HashMap<String, Object> map);
 	
+	int stuDelete (HashMap<String, Object> map);
 	
 }

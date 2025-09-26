@@ -35,6 +35,7 @@
                 <th>학과</th>
                 <th>학년</th>
                 <th>성별</th>
+                <th>삭제</th>
             </tr>
             <tr v-for="item in list">
                 <td>{{item.stuNo}}</td>
@@ -42,6 +43,9 @@
                 <td>{{item.stuDept}}</td>
                 <td>{{item.stuGrade}}</td>
                 <td>{{item.stuGender}}</td>
+                <td>
+                    <button @click="fnRemove(item.stuNo)">삭제</button>
+                </td>
             </tr>
         </table>
     </div>
@@ -89,7 +93,23 @@
 						console.log(data);
 	                }
 	            });
-			}
+			},
+            fnRemove: function(stuNo){
+                let self = this;
+                let param = {
+                    stuNo : stuNo
+                };
+                $.ajax({
+                    url: "stu-delete.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert("삭제되었습니다!");
+                        self.fnList();
+                    }
+                });
+            }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분

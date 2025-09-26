@@ -11,7 +11,7 @@
         table, tr, td, th{
             border : 1px solid black;
             border-collapse: collapse;
-            padding : 5px 10px;
+            padding : 20px 20px;
             text-align: center;
         }
         th{
@@ -20,50 +20,35 @@
         tr:nth-child(even){
             background-color: azure;
         }
+
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-        <div>
-            <select v-model="kind" @change="fnList">
-                <option value="">:: 전체 ::</option>
-                <option value="1">:: 공지사항 ::</option>
-                <option value="2">:: 자유게시판 ::</option>
-                <option value="3">:: 문의게시판 ::</option>
-            </select>
-
-            <select v-model="sort" @change="fnList">
-                <option value="1">:: 번호순 ::</option>
-                <option value="2">:: 제목순 ::</option>
-                <option value="3">:: 조회순 ::</option>
-            </select>
-
-        </div>
-        <div>
+         <div>
             <table>
                 <tr>
-                    <th>번호</th>
                     <th>제목</th>
-                    <th>작성자</th>
-                    <th>조회수</th>
-                    <th>작성일</th>
-                    <th>삭제</th>
-                        
-                    </th>
-                </tr>
-                <tr v-for="item in list">
-                    <td>{{item.boardno}}</td>
-                    <td>{{item.title}}</td>
-                    <td>{{item.userid}}</td>
-                    <td>{{item.cnt}}</td>
-                    <td>{{item.cdate}}</td>
                     <td>
-                        <button @click="fnDelete(item.boardno)">삭제</button>
+                        <input type="text" v-model="title">
+                    </td>
+                </tr>
+                <tr>
+                    <th>작성자</th>
+                    <td>
+                        <input type="text" v-model="userid">
+                    </td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td>
+                        <textarea v-model="contents"></textarea>
                     </td>
                 </tr>
             </table>
-        </div>
+            <button @click="fnAdd">추가</button>
+         </div>
     </div>
 </body>
 </html>
@@ -73,44 +58,41 @@
         data() {
             return {
                 // 변수 - (key : value)
-                list : [],
-                kind : "",
-                sort : "1"
+                title : "",
+                userid : "",
+                contents : ""
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
             fnList: function () {
                 let self = this;
-                let param = {
-                    kind : self.kind,
-                    sort : self.sort
-                };
+                let param = {};
                 $.ajax({
-                    url: "board-list.dox",
+                    url: "",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        self.list = data.list;
-                        console.log(data);
 
                     }
                 });
             },
-            fnDelete: function(boardno) {
+            fnAdd: function(){
                 let self = this;
                 let param = {
-                    boardno : boardno
-                };
+                    title : self.title,
+                    userid : self.userid,
+                    contents : self.contents
+                }
                 $.ajax({
-                    url: "board-delete.dox",
+                    url: "board-add.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert("삭제되었습니다!");
-                        self.fnList();
+                        alert("추가되었습니다!");
+                        location.href="board-list.do";
                     }
                 });
             }
@@ -118,7 +100,6 @@
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            self.fnList();
         }
     });
 
