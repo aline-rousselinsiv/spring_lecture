@@ -62,13 +62,13 @@
                     <td>{{item.cnt}}</td>
                     <td>{{item.cdate}}</td>
                     <td>
-                        <button @click="fnDelete(item.boardno)">삭제</button>
+                        <button v-if="sessionId == item.userid || sessionStatus == 'A'" @click="fnDelete(item.boardno)">삭제</button>
                     </td>
                 </tr>
             </table>
         </div>
         <div>
-            <a href="board-add.do"><button>글쓰기</button></a>
+            <button @click="fnAdd">글쓰기</button>
         </div>
     </div>
 </body>
@@ -81,7 +81,10 @@
                 // 변수 - (key : value)
                 list : [],
                 kind : "",
-                sort : "1"
+                sort : "1",
+                sessionId : "${sessionId}",
+                sessionName : "${sessionName}",
+                sessionStatus : "${sessionStatus}"
             };
         },
         methods: {
@@ -123,6 +126,13 @@
             fnView: function(boardno){
                 pageChange("board-view.do", {boardno : boardno});
 
+            },
+            fnAdd:function(){
+                if(self.sessionId == ""){
+                    alert("");
+                } else { 
+                    location.href="/board-add.do";
+                }
             }
         }, // methods
         mounted() {

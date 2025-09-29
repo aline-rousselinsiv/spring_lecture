@@ -78,7 +78,7 @@
                     }
                 });
             },
-            fnEdit: function(){
+            fnEdit: function(stuNo){
                 pageChange("stu-edit.do", {stuNo : stuNo});
             }
         }, // methods
