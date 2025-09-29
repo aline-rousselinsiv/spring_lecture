@@ -28,6 +28,7 @@
          {{sessionId}}님 환영합니다! 메인페이지 입니다!
          <div>
             <a href="/board-list.do"><button>게시판으로 이동</button></a>
+            <button @click="fnLogout">로그아웃</button>
          </div>
     </div>
 </body>
@@ -45,16 +46,17 @@
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnList: function () {
+            fnLogout: function(){
                 let self = this;
                 let param = {};
                 $.ajax({
-                    url: "",
+                    url: "/member/logout.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-
+                        alert(data.msg);
+                        location.href="/member/login.do"
                     }
                 });
             }

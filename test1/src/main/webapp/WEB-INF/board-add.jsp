@@ -67,7 +67,8 @@
                 // 변수 - (key : value)
                 title : "",
                 userid : "",
-                contents : ""
+                contents : "",
+                sessionId : "${sessionId}"
                 
             };
         },
@@ -95,6 +96,9 @@
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            if(self.sessionId == ""){
+                alert("로그인 후 이영해서 주세요.");
+            }
         }
     });
 

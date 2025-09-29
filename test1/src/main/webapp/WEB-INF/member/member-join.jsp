@@ -32,17 +32,27 @@
         <div>
             <label>비밀먼호 : <input v-model="pwd" type="password"></label>
         </div>
+        <div>
+            주소 : <input v-model="addr"> <button @click="fnAddr">주소검색</button>
+        </div>
     </div>
 </body>
 </html>
 
 <script>
+    function jusoCallBack(roadFullAddr, roadAddrPart1, addrDetail, roadAddrPart2, engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn, detBdNmList, bdNm, bdKdcd, siNm, sggNm, emdNm, liNm, rn, udrtYn, buldMnnm, buldSlno, mtYn, lnbrMnnm, lnbrSlno, emdNo) {
+            console.log(roadFullAddr);
+            console.log(addrDetail);
+            console.log(zipNo);
+            window.vueObj.fnResult(roadFullAddr, addrDetail, zipNo);
+        }
     const app = Vue.createApp({
         data() {
             return {
                 // 변수 - (key : value)
                 id : "",
-                pwd : ""
+                pwd : "",
+                addr : ""
             };
         },
         methods: {
@@ -65,11 +75,19 @@
                         }
                     }
                 });
+            },
+            fnAddr: function(){
+                window.open("/addr.do", "addr", "width=500, height = 500");
+            },
+            fnResult: function(roadFullAddr, addrDetail, zipNo){
+                let self = this;
+                self.addr = roadFullAddr;
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            window.vueObj = this;
         }
     });
 

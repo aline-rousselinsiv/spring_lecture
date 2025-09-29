@@ -68,7 +68,7 @@
             </table>
         </div>
         <div>
-            <button @click="fnAdd">글쓰기</button>
+            <a href="board-add.do"><button>글쓰기</button></a>
         </div>
     </div>
 </body>
@@ -126,13 +126,6 @@
             fnView: function(boardno){
                 pageChange("board-view.do", {boardno : boardno});
 
-            },
-            fnAdd:function(){
-                if(self.sessionId == ""){
-                    alert("");
-                } else { 
-                    location.href="/board-add.do";
-                }
             }
         }, // methods
         mounted() {
