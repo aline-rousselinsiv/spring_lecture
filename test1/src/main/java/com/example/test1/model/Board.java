@@ -7,6 +7,8 @@ public class Board {
 	private int cnt;
 	private String cdate;
 	private String contents;
+	private String commentCnt;
+	
 	public int getBoardno() {
 		return boardno;
 	}
@@ -42,6 +44,12 @@ public class Board {
 	}
 	public void setContents(String contents) {
 		this.contents = contents;
+	}
+	public String getCommentCnt() {
+		return commentCnt;
+	}
+	public void setCommentCnt(String commentCnt) {
+		this.commentCnt = commentCnt;
 	}
 	
 

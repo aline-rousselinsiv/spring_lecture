@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.BoardMapper;
 import com.example.test1.model.Board;
+import com.example.test1.model.Comment;
 
 @Service
 public class BoardService {
@@ -48,6 +49,8 @@ public class BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		Board info = boardMapper.selectBoard(map);
+		List<Comment> commentList = boardMapper.selectCommentList(map);
+		resultMap.put("commentList", commentList);
 		
 		resultMap.put("info", info);
 		resultMap.put("result", "success");

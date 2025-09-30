@@ -21,11 +21,23 @@
         tr:nth-child(even){
             background-color: azure;
         }
+        span{
+            color: red;
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
+         <div>
+            <select v-model="searchOption">
+                <option value="all">:: 전체 :: </option>
+                <option value="title">:: 제목 :: </option>
+                <option value="id">:: 작성자 :: </option>
+            </select>
+            <input v-model="keyword">
+            <button @click="fnList">검색</button>
+         </div>
         <div>
             <select v-model="kind" @change="fnList">
                 <option value="">:: 전체 ::</option>
@@ -57,6 +69,7 @@
                     <td>{{item.boardno}}</td>
                     <td>
                         <a href="javascript:;" @click="fnView(item.boardno)">{{item.title}}</a>
+                        <span v-if="item.commentCnt != 0"> [{{item.commentCnt}}]</span>
                     </td>
                     <td>{{item.userid}}</td>
                     <td>{{item.cnt}}</td>
@@ -84,7 +97,9 @@
                 sort : "1",
                 sessionId : "${sessionId}",
                 sessionName : "${sessionName}",
-                sessionStatus : "${sessionStatus}"
+                sessionStatus : "${sessionStatus}",
+                keyword : "",
+                searchOption : "all"
             };
         },
         methods: {
@@ -93,7 +108,9 @@
                 let self = this;
                 let param = {
                     kind : self.kind,
-                    sort : self.sort
+                    sort : self.sort,
+                    keyword : self.keyword,
+                    searchOption : self.searchOption
                 };
                 $.ajax({
                     url: "board-list.dox",
@@ -112,6 +129,9 @@
                 let param = {
                     boardno : boardno
                 };
+                if(!confirm("정말 삭제하겠습니까?")){
+                    return;
+                }
                 $.ajax({
                     url: "board-delete.dox",
                     dataType: "json",

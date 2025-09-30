@@ -4,14 +4,33 @@
 
 <mapper namespace="com.example.test1.mapper.BoardMapper">
 	<select id="boardList" parameterType="hashmap" resultType="com.example.test1.model.Board">
-		SELECT B.*, TO_CHAR(CDATETIME, 'YYYY-MM-DD') AS CDATE
+		SELECT B.*, TO_CHAR(CDATETIME, 'YYYY-MM-DD') AS CDATE, NVL(COMMENT_CNT, 0) AS COMMENT_CNT
 		FROM TBL_BOARD B
+		LEFT JOIN (
+		    SELECT BOARDNO, COUNT(*) AS COMMENT_CNT
+		    FROM TBL_COMMENT
+		    GROUP BY BOARDNO   
+		) T ON T.BOARDNO = B.BOARDNO
 		WHERE 1=1
 		<if test="kind != '' and kind != null">
 			AND KIND = #{kind}
 		</if>
+		<if test="searchOption == 'all'">
+			AND (
+				TITLE LIKE '%' || #{keyword} || '%'
+				OR USERID LIKE '%' || #{keyword} || '%'
+				) 
+		</if>
+		<if test="searchOption == 'title'">
+			AND TITLE LIKE '%' || #{keyword} || '%' 
+		</if>
+		<if test="searchOption == 'id'">
+			AND USERID LIKE '%' || #{keyword} || '%' 
+		</if>
+		
+		
 		<if test="sort == 1">
-			ORDER BY BOARDNO ASC
+			ORDER BY B.BOARDNO ASC
 		</if>
 		<if test="sort == 2">
 			ORDER BY TITLE ASC
@@ -19,7 +38,6 @@
 		<if test="sort == 3">
 			ORDER BY CNT DESC
 		</if>
-		
 	</select>
 	<insert id="boardAdd" parameterType="hashmap">
 		INSERT INTO TBL_BOARD
@@ -30,10 +48,18 @@
 		DELETE FROM TBL_BOARD
 		WHERE BOARDNO = #{boardno}
 	</delete>
+	
 	<select id="selectBoard" parameterType="hashmap" resultType="com.example.test1.model.Board">
 		SELECT B.*, TO_CHAR(CDATETIME, 'YYYY-MM-DD') AS CDATE
 		FROM TBL_BOARD B
 		WHERE BOARDNO = #{boardno}
+	</select>
+	
+	<select id="selectCommentList" parameterType="hashmap" resultType="com.example.test1.model.Comment">
+		SELECT C.*, U.NICKNAME
+		FROM TBL_COMMENT C
+		INNER JOIN TBL_USER U ON C.USERID = U.USERID
+		WHERE C.BOARDNO = #{boardno}
 	</select>
 	
 </mapper>

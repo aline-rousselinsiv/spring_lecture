@@ -56,7 +56,7 @@
         data() {
             return {
                 // 변수 - (key : value)
-                stuNo : "${stuNo}",
+                stuNo : "${stuNo}", // retrieving the stu number we sent from stu-list.jsp (pageChange())
                 info : {}
             };
         },

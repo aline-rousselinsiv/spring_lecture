@@ -7,6 +7,8 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <style>
         table, tr, td, th{
             border : 1px solid black;
@@ -18,11 +20,14 @@
             background-color: beige;
         }
         td {
-            width: 250px;
+            width: 450px;
         }
-        textarea {
-            height: 150px;
-            width: 250px;
+        #editor {
+            width: 450px;
+            height: 350px;
+        }
+        #textarea {
+            height: 400px;
         }
         input {
             width: 250px;
@@ -49,8 +54,8 @@
                 </tr>
                 <tr>
                     <th>내용</th>
-                    <td>
-                        <textarea v-model="contents"></textarea>
+                    <td id="textarea">
+                        <div id="editor"></div>
                     </td>
                 </tr>
             </table>
@@ -99,6 +104,23 @@
             if(self.sessionId == ""){
                 alert("로그인 후 이영해서 주세요.");
             }
+            var quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'image'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // 에디터 내용이 변경될 때마다 Vue 데이터를 업데이트
+        quill.on('text-change', function() {
+            self.contents = quill.root.innerHTML;
+        });
         }
     });
 
