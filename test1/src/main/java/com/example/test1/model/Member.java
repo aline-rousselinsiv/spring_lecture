@@ -10,4 +10,8 @@ public class Member {
 	private String birth;
 	private String nickName;
 	private String status;
+	private String address;
+	private String gender;
+	private String phone;
+	
 }
