@@ -29,6 +29,14 @@
             color: black;
             margin-right: 5px;
         }
+        .active{
+            color: black;
+            font-weight: bold;
+        }
+        .arrow{
+            text-decoration: none;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -93,10 +101,13 @@
                 </tr>
             </table>
             <div>
+                <a class="arrow" v-if="page != 1" @click="fnMove(-1)" href="javascript:;">◀</a>
                 <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)">
-                    <span v-if="num == page" style="font-weight: bold;">{{num}}</span>
-                    <span v-else>{{num}}</span>
+                    <span :class="{active : num == page}">{{num}}</span>
+                    <!-- <span v-if="num == page" style="font-weight: bold;">{{num}}</span>
+                    <span v-else>{{num}}</span> -->
                 </a>
+                <a class="arrow" v-if="page != index" @click="fnMove(+1)" href="javascript:;">▶</a>
             </div>
         </div>
         <div>
@@ -178,6 +189,12 @@
                 self.page = num;
                 self.fnList();
             },
+            fnMove: function(num){
+                let self = this;
+                self.page += num;
+                self.fnList();
+
+            }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
