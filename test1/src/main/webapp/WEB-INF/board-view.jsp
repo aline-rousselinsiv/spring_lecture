@@ -8,25 +8,16 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
-        #board table, tr, td, th{
+        table, tr, td, th{
             border : 1px solid black;
             border-collapse: collapse;
             padding : 5px 10px;
-            text-align: center;
-            height: 50px;
         }
         th{
             background-color: beige;
-            width: 100px;
         }
-        td {
-            width: 300px;
-        }
-        ul {
-            list-style-type: none;
-        }
-        #input table th{
-            width: 100px;
+        input{
+            width: 350px;
         }
 
 
@@ -45,6 +36,10 @@
                 <td>{{info.userid}}</td>
             </tr>
             <tr>
+                <th>조회수</th>
+                <td>{{info.cnt}}</td>
+            </tr>
+            <tr>
                 <th>작성일</th>
                 <td>{{info.cdate}}</td>
             </tr>
@@ -54,25 +49,22 @@
             </tr>
          </table>
          <hr>
-         <div>
-            <span style="font-weight: bold;">댓글</span>            
-            <ul v-for="item in commentList">
-                <li>
-                    <span style="font-weight: bold;">{{item.nickName}}</span>
-                    <div>{{item.contents}}</div>
-                    <div>{{item.cdateTime}}</div>
-                    <div><button>삭제</button> <button>수정</button></div>
-                </li>
-                <hr>
-            </ul>
-            <table id="input">
-                <th>입력</th>
-                <td>
-                    <textarea cols="40" cols="5"></textarea>
-                </td>
-                <td><button>저장</button></td>
-            </table>
-         </div>
+         <table id="comment">
+            <tr v-for="item in commentList">
+                <th>{{item.nickName}}</th>
+                <td>{{item.contents}}</td>
+                <td><button>삭제</button></td>
+                <td><button>수정</button></td>
+            </tr>   
+        </table>
+        <hr>
+        <table id="input">
+            <th>댓글 입력</th>
+            <td>
+                <textarea v-model="contents" cols="40" rows="4"></textarea>
+            </td>
+            <td><button @click="fnAddComment">저장</button></td>
+        </table>
     </div>
 </body>
 </html>
@@ -84,7 +76,9 @@
                 // 변수 - (key : value)
                 boardno : "${boardno}",
                 info : {},
-                commentList : []
+                commentList : [],
+                sessionId : "${sessionId}",
+                contents : ""
             };
         },
         methods: {
@@ -103,6 +97,30 @@
                         console.log(data);
                         self.info = data.info;
                         self.commentList = data.commentList;
+                    }
+                });
+            },
+            fnAddComment: function(){
+                let self = this;
+                let param = {
+                    userid : self.sessionId,
+                    boardno : self.boardno,
+                    contents : self.contents
+                };
+                $.ajax({
+                    url: "board-addCom.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert(data.msg);
+                        // if(data.result == "success"){
+                        //     alert("댓글이 등록되었습니다.");
+                        // } else {
+                        //     alert("서버 오류가 발생했습니다. 다시 시도해주세요.");
+                        // }
+                        self.fnInfo();
+                        self.contents = "";
                     }
                 });
             }

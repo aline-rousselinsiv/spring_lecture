@@ -4,7 +4,7 @@
 
 <mapper namespace="com.example.test1.mapper.BoardMapper">
 	<select id="boardList" parameterType="hashmap" resultType="com.example.test1.model.Board">
-		SELECT B.*, TO_CHAR(CDATETIME, 'YYYY-MM-DD') AS CDATE, NVL(COMMENT_CNT, 0) AS COMMENT_CNT
+		SELECT B.*, DECODE(TO_CHAR(CDATETIME, 'YYYY-MM-DD'), TO_CHAR(SYSDATE, 'YYYY-MM-DD'), TO_CHAR(CDATETIME, 'HH24:MI:SS'), TO_CHAR(CDATETIME, 'YYYY-MM-DD')) AS CDATE, NVL(COMMENT_CNT, 0) AS COMMENT_CNT
 		FROM TBL_BOARD B
 		LEFT JOIN (
 		    SELECT BOARDNO, COUNT(*) AS COMMENT_CNT
@@ -38,7 +38,37 @@
 		<if test="sort == 3">
 			ORDER BY CNT DESC
 		</if>
+		<if test="sort == 4">
+			ORDER BY B.CDATETIME DESC
+		</if>
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		
 	</select>
+	
+	<select id="boardCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) AS CNT
+		FROM TBL_BOARD B
+		
+		WHERE 1=1
+		<if test="kind != '' and kind != null">
+			AND KIND = #{kind}
+		</if>
+		<if test="searchOption == 'all'">
+			AND (
+				TITLE LIKE '%' || #{keyword} || '%'
+				OR USERID LIKE '%' || #{keyword} || '%'
+				) 
+		</if>
+		<if test="searchOption == 'title'">
+			AND TITLE LIKE '%' || #{keyword} || '%' 
+		</if>
+		<if test="searchOption == 'id'">
+			AND USERID LIKE '%' || #{keyword} || '%' 
+		</if>
+		
+		
+	</select>
+	
 	<insert id="boardAdd" parameterType="hashmap">
 		INSERT INTO TBL_BOARD
 		VALUES(B_SEQ.NEXTVAL, #{title}, #{contents}, #{userid}, 0, 0, 1, SYSDATE, SYSDATE)
@@ -60,7 +90,19 @@
 		FROM TBL_COMMENT C
 		INNER JOIN TBL_USER U ON C.USERID = U.USERID
 		WHERE C.BOARDNO = #{boardno}
+		ORDER BY C.CDATETIME ASC
 	</select>
+	
+	<insert id="addComment" parameterType="hashmap">
+		INSERT INTO TBL_COMMENT (COMMENTNO, BOARDNO, CONTENTS, USERID, FAVORITE, P_COMMENTNO, CDATETIME, UDATETIME)
+		VALUES(COMMENT_SEQ.NEXTVAL, #{boardno}, #{contents}, #{userid}, 0, NULL, SYSDATE, SYSDATE)
+	</insert>
+	
+	<update id="viewCnt" parameterType="hashmap">
+		UPDATE TBL_BOARD
+		SET CNT = CNT + 1
+		WHERE BOARDNO = #{boardno} 
+	</update>
 	
 </mapper>
 

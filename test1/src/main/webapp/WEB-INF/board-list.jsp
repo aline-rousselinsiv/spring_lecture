@@ -21,8 +21,13 @@
         tr:nth-child(even){
             background-color: azure;
         }
-        span{
+        #comment{
             color: red;
+        }
+        #index {
+            text-decoration: none;
+            color: black;
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -39,6 +44,13 @@
             <button @click="fnList">검색</button>
          </div>
         <div>
+
+            <select v-model="pageSize" @change="fnList">
+                <option value="5">5개씩</option>
+                <option value="10">10개씩</option>
+                <option value="20">20개씩</option>
+            </select>
+
             <select v-model="kind" @change="fnList">
                 <option value="">:: 전체 ::</option>
                 <option value="1">:: 공지사항 ::</option>
@@ -50,6 +62,7 @@
                 <option value="1">:: 번호순 ::</option>
                 <option value="2">:: 제목순 ::</option>
                 <option value="3">:: 조회순 ::</option>
+                <option value="4">:: 시간순 ::</option>
             </select>
 
         </div>
@@ -69,7 +82,7 @@
                     <td>{{item.boardno}}</td>
                     <td>
                         <a href="javascript:;" @click="fnView(item.boardno)">{{item.title}}</a>
-                        <span v-if="item.commentCnt != 0"> [{{item.commentCnt}}]</span>
+                        <span id="comment" v-if="item.commentCnt != 0"> [{{item.commentCnt}}]</span>
                     </td>
                     <td>{{item.userid}}</td>
                     <td>{{item.cnt}}</td>
@@ -79,6 +92,12 @@
                     </td>
                 </tr>
             </table>
+            <div>
+                <a id="index" href="javascript:;" v-for="num in index" @click="fnPage(num)">
+                    <span v-if="num == page" style="font-weight: bold;">{{num}}</span>
+                    <span v-else>{{num}}</span>
+                </a>
+            </div>
         </div>
         <div>
             <a href="board-add.do"><button>글쓰기</button></a>
@@ -99,7 +118,10 @@
                 sessionName : "${sessionName}",
                 sessionStatus : "${sessionStatus}",
                 keyword : "",
-                searchOption : "all"
+                searchOption : "all",
+                pageSize : 5, //  한페이지에 출력할 개수
+                page : 1,
+                index : 0 // 최대 페이지 값
             };
         },
         methods: {
@@ -110,7 +132,10 @@
                     kind : self.kind,
                     sort : self.sort,
                     keyword : self.keyword,
-                    searchOption : self.searchOption
+                    searchOption : self.searchOption,
+
+                    page : (self.page-1) * self.pageSize,
+                    pageSize : self.pageSize
                 };
                 $.ajax({
                     url: "board-list.dox",
@@ -119,6 +144,7 @@
                     data: param,
                     success: function (data) {
                         self.list = data.list;
+                        self.index = Math.ceil(data.cnt / self.pageSize);
                         console.log(data);
 
                     }
@@ -146,7 +172,12 @@
             fnView: function(boardno){
                 pageChange("board-view.do", {boardno : boardno});
 
-            }
+            },
+            fnPage : function(num){
+                let self = this;
+                self.page = num;
+                self.fnList();
+            },
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
