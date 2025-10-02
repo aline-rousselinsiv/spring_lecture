@@ -79,6 +79,9 @@
             </select>
         </div>
         <div>
+            <input type="file" id="file1" name="file1" accept=".jpg, .png">
+        </div>
+        <div>
             <button @click="fnJoin">회원가입</button>
         </div>
     </div>
@@ -230,11 +233,11 @@
                 }
                 // 문자 인증이 완료되지 않으면
                 // 회원가입 불기능 (안내문구 출력)
-                if(!self.joinFlg){
-                    alert("문자 인증을 진행해주세요.");
-                    document.querySelector("#auth").focus();
-                    return;
-                }
+                // if(!self.joinFlg){
+                //     alert("문자 인증을 진행해주세요.");
+                //     document.querySelector("#auth").focus();
+                //     return;
+                // }
                 let param = {
                     id : self.id,
                     pwd : self.pwd,

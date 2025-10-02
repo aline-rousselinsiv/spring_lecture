@@ -69,7 +69,7 @@
 		
 	</select>
 	
-	<insert id="boardAdd" parameterType="hashmap">
+	<insert id="boardAdd" parameterType="hashmap" useGeneratedKeys="true" keyColumn="BOARDNO" keyProperty="boardNo" >
 		INSERT INTO TBL_BOARD
 		VALUES(B_SEQ.NEXTVAL, #{title}, #{contents}, #{userid}, 0, 0, 1, SYSDATE, SYSDATE)
 	</insert>
@@ -77,6 +77,14 @@
 	<delete id="deleteBoard" parameterType="hashmap">
 		DELETE FROM TBL_BOARD
 		WHERE BOARDNO = #{boardno}
+	</delete>
+	
+	<delete id="deleteBoardList" parameterType="hashmap">
+		DELETE FROM TBL_BOARD
+		WHERE BOARDNO IN
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
 	</delete>
 	
 	<select id="selectBoard" parameterType="hashmap" resultType="com.example.test1.model.Board">
@@ -103,6 +111,17 @@
 		SET CNT = CNT + 1
 		WHERE BOARDNO = #{boardno} 
 	</update>
+	
+	<insert id="insertBoardImg" parameterType="hashmap">
+		INSERT INTO TBL_BOARD_FILE
+		VALUES(FILE_SEQ.NEXTVAL, #{boardNo}, #{path}, #{fileName}, #{orgName}, #{size}, #{ext})
+	</insert>
+	
+	<select id="selectFileList" parameterType="hashmap" resultType="com.example.test1.model.Board">
+		SELECT *
+		FROM TBL_BOARD_FILE
+		WHERE BOARDNO = #{boardno}
+	</select>
 	
 </mapper>
 

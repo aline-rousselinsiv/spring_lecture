@@ -49,8 +49,14 @@
                 <tr>
                     <th>작성자</th>
                     <td>
-                        <input type="text" v-model="userid">
+                        {{userid}}
                     </td>
+                </tr>
+                <tr>
+                    <th>파일첨부</th>
+                    <td><input type="file" id="file1" name="file1" accept=".jpg, .png"></td> 
+                    <!-- multiple >> can add nultiple files -->
+                    <!-- accept >> type of files accepted -->
                 </tr>
                 <tr>
                     <th>내용</th>
@@ -71,7 +77,7 @@
             return {
                 // 변수 - (key : value)
                 title : "",
-                userid : "",
+                userid : "${sessionId}",
                 contents : "",
                 sessionId : "${sessionId}"
                 
@@ -81,6 +87,7 @@
             // 함수(메소드) - (key : function())
             fnAdd: function(){
                 let self = this;
+
                 let param = {
                     title : self.title,
                     userid : self.userid,
@@ -93,8 +100,26 @@
                     data: param,
                     success: function (data) {
                         alert("등록되었습니다!");
-                        location.href="board-list.do";
+                        console.log(data.boardNo);
+                        var form = new FormData();
+                        form.append( "file1",  $("#file1")[0].files[0] );
+                        form.append( "boardNo",  data.boardNo); // 임시 pk
+                        self.upload(form); 
+                        // location.href="board-list.do";
                     }
+                });
+            },
+            upload : function(form){
+                var self = this;
+                $.ajax({
+                    url : "/fileUpload.dox"
+                    , type : "POST"
+                    , processData : false
+                    , contentType : false
+                    , data : form
+                    , success:function(response) { 
+                        console.log(data);
+                    }	           
                 });
             }
         }, // methods
@@ -102,7 +127,7 @@
             // 처음 시작할 때 실행되는 부분
             let self = this;
             if(self.sessionId == ""){
-                alert("로그인 후 이영해서 주세요.");
+                alert("로그인 후 이용해주세요.");
             }
             var quill = new Quill('#editor', {
             theme: 'snow',

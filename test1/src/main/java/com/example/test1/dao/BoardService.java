@@ -39,11 +39,22 @@ public class BoardService {
 		
 	}
 	
+	public HashMap<String, Object> removeBoardList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		int cnt = boardMapper.deleteBoardList(map);
+		
+		resultMap.put("result", "success");
+		return resultMap;
+		
+	}
+	
 	public HashMap<String, Object> addBoardList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		int cnt = boardMapper.boardAdd(map);
-
+		
+		resultMap.put("boardNo", map.get("boardNo"));
 		resultMap.put("result", "success");
 		return resultMap;
 	}
@@ -57,7 +68,10 @@ public class BoardService {
 		List<Comment> commentList = boardMapper.selectCommentList(map);
 		resultMap.put("commentList", commentList);
 		
+		List<Board> fileList = boardMapper.selectFileList(map);
+		
 		resultMap.put("info", info);
+		resultMap.put("fileList", fileList);
 		resultMap.put("result", "success");
 		return resultMap;
 	}
@@ -78,6 +92,11 @@ public class BoardService {
 			resultMap.put("msg", "서버 오류가 발생했습니다. 다시 시도해주세요.");
 		}
 		return resultMap;
+	}
+
+	public void addBoardImg(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		int cnt = boardMapper.insertBoardImg(map);
 	}
 	
 }
