@@ -20,4 +20,6 @@ public interface StudentMapper {
 	// 상세 정보 조회
 	Student studentView (HashMap<String, Object> map);
 	
+	//학생 리스트 삭제
+	int deleteAll (HashMap<String, Object> map);
 }

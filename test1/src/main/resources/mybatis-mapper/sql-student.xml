@@ -23,6 +23,14 @@
 		WHERE S.STU_NO = #{stuNo}
 		GROUP BY S.STU_NO, S.STU_NAME, S.STU_DEPT
 	</select>
+	<delete id="deleteAll" parameterType="hashmap">
+		DELETE FROM STUDENT
+		WHERE STU_NO IN 
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>	
+		
+	</delete>
 </mapper>
 
 
