@@ -37,10 +37,23 @@
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
          <div>
             도/특별시 : 
-            <select v-model="si">
+            <select v-model="si" @change="fnGuList">
                 <option value="">:: 전체 ::</option>
                 <option :value="item.si" v-for="item in siList">:: {{item.si}} ::</option>
             </select>
+            구 : 
+            <select v-model="gu" @change="fnDongList">
+                <option value="">:: 선택 ::</option>
+                <option :value="item.gu" v-for="item in guList">{{item.gu}}</option>
+            </select>
+            동 : 
+            <select v-model="dong" >
+                <option value="">:: 선택 ::</option>
+                <option :value="item.dong" v-for="item in dongList">{{item.dong}}</option>
+            </select>
+            <label for="">
+                <button @click="fnList">검색</button>
+            </label>
          </div>
          <div>
             <table>
@@ -76,10 +89,14 @@
                 // 변수 - (key : value)
                 areaList : [],
                 page: 1,
-                index : 0, // 178 pages >> 178 / 10
+                index : 0, 
                 pageSize : 20,
                 siList : [],
-                si : "" //  선택한 시(오)의 값
+                guList : [],
+                dongList : [],
+                si : "", //  선택한 시(오)의 값
+                gu : "",
+                dong : ""
             };
         },
         methods: {
@@ -89,7 +106,9 @@
                 let param = {
                     page : (self.page-1) * self.pageSize,
                     pageSize : self.pageSize,
-                    si : self.si
+                    si : self.si,
+                    gu : self.gu,
+                    dong : self.dong
                 };
                 $.ajax({
                     url: "/area/list.dox",
@@ -100,7 +119,8 @@
                         console.log(data);
                         self.areaList = data.list;
                         self.index = Math.ceil(data.cnt / self.pageSize);
-                        self.fnList();
+                        self.fnGuList();
+                        self.fnDongList();
                     }
                 });
             },
@@ -120,15 +140,52 @@
                     success: function (data) {
                         console.log(data);
                         self.siList = data.list;
+
                     }
                 });
             },
+            fnGuList: function () {
+                let self = this;
+                let param = {
+                    si : self.si
+                };
+                $.ajax({
+                    url: "/area/gu.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        console.log(data);
+                        self.gu = "";
+                        self.guList = data.guList;
+                    }
+                });
+            },
+            fnDongList: function () {
+                let self = this;
+                let param = {
+                    gu : self.gu
+                };
+                $.ajax({
+                    url: "/area/dong.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        console.log(data);
+                        self.dong = "";
+                        self.dongList = data.dongList;
+                    }
+                });
+            }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
             self.fnList();
             self.fnSiList();
+            self.fnGuList();
+            self.fnDongList();
         }
     });
 

@@ -38,4 +38,24 @@ public class AreaService {
 		resultMap.put("result", "success");
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> getGuList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List <Area> guList = areaMapper.selectGuList(map);
+		
+		resultMap.put("guList", guList);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> getDongList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		List <Area> dongList = areaMapper.selectDongList(map);
+		
+		resultMap.put("dongList", dongList);
+		resultMap.put("result", "success");
+		return resultMap;
+	}
 }

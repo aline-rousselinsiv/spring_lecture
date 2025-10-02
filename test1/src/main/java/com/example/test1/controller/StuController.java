@@ -74,5 +74,15 @@ public class StuController {
 		request.setAttribute("stuNo", map.get("stuNo"));
         return "/stu-edit";
 	}
+	
+	@RequestMapping(value = "/stu/deleteList.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String deleteList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println(map);
+//		resultMap = studentService.getStudentView(map);
+		
+		return new Gson().toJson(resultMap);
+	}
   
 }
