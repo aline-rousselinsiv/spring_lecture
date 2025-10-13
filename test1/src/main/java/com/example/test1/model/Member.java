@@ -13,5 +13,7 @@ public class Member {
 	private String address;
 	private String gender;
 	private String phone;
+	private int cnt;
+	private String cBirth;
 	
 }

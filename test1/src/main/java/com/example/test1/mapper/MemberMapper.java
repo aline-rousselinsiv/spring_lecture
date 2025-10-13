@@ -1,6 +1,7 @@
 package com.example.test1.mapper;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,8 +13,17 @@ public interface MemberMapper {
 	Member memberLogin(HashMap<String, Object> map);
 	
 	// 중복체크
-	Member idCheck(HashMap<String, Object> map);
+	Member memberCheck(HashMap<String, Object> map);
 	
 	// 가입
 	int memberJoin(HashMap<String, Object> map);
+	
+	// 회원 목록(관리자)
+	List<Member> selectMemberList(HashMap<String, Object> map);
+		
+	// 로그인 성공 시 cnt 초기화
+	int cntInit(HashMap<String, Object> map);
+	
+	// 로그인 실패 시 cnt 1증가
+	int cntIncrease(HashMap<String, Object> map);
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.ProductMapper">
+	<select id="productList" parameterType="hashmap" resultType="com.example.test1.model.Product">
+		SELECT * 
+		FROM TBL_FOOD F
+		INNER JOIN TBL_FOOD_IMG I ON F.FOOD_NO = I.FOOD_NO
+		WHERE 1=1
+		<if test="searchWord != '' and searchWord != null">
+			AND FOOD_NAME LIKE '%' || #{searchWord} || '%'
+			OR FOOD_INFO LIKE '%' || #{searchWord} || '%'
+		</if>
+		
+	</select>
+	
+</mapper>
+
+
+
+
