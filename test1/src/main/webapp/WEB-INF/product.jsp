@@ -18,35 +18,18 @@
             <div class="logo">
                 <img src="/img/logo.png" alt="쇼핑몰 로고">
             </div>
-
             <nav>
                 <ul>
-                    <li class="dropdown">
-                        <a href="#">한식</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" @click="fnSelectDish('비빔밥')">비빔밥</a></li>
-                            <li><a href="#" >김치찌개</a></li>
-                            <li><a href="#">불고기</a></li>
+                    <li class="dropdown" v-for="item in menuList" >
+                        <a v-if="item.depth == 1" href="#" @click="fnProductList(item.menuNo, '')">{{item.menuName}}</a>
+                        <ul class="dropdown-menu" v-if="item.cnt > 0">
+                            <span v-for="subItem in menuList">
+                                <li>
+                                    <a @click="fnProductList('', subItem.menuNo)" v-if="item.menuNo == subItem.menuPart " href="#">{{subItem.menuName}}</a>
+                                </li>
+                            </span>
                         </ul>
                     </li>
-                    <li class="dropdown">
-                        <a href="#">중식</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" @click="fnSelectDish('짜장면')">짜장면</a></li>
-                            <li><a href="#">짬뽕</a></li>
-                            <li><a href="#">마파두부</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#">양식</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" @click="fnSelectDish('피자')">피자</a></li>
-                            <li><a href="#">파스타</a></li>
-                            <li><a href="#">스테이크</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">디저트</a></li>
-                    <li><a href="#">음료</a></li>
                 </ul>
             </nav>
             <div class="search-bar">
@@ -78,15 +61,18 @@
         data() {
             return {
                 productList : [],
-                searchWord : ""
+                searchWord : "",
+                menuList : []
 
             };
         },
         methods: {
-            fnProductList: function() {
+            fnProductList: function(menuPart, menuNo) {
                 var self = this;
                 var nparmap = {
-                    searchWord : self.searchWord
+                    searchWord : self.searchWord,
+                    menuPart : menuPart,
+                    menuNo : menuNo
                 };
                 $.ajax({
                     url: "/product/list.dox",
@@ -96,15 +82,16 @@
                     success: function (data) {
                         console.log(data);
                         self.productList = data.list;
+                        self.menuList = data.menuList;
                     }
                 });
-            },
-            fnSelectDish : function(dish){
-                var self = this;
-                self.searchWord = dish;
-                self.fnProductList();
-                self.searchWord = "";
             }
+            // fnSelectDish : function(dish){
+            //     var self = this;
+            //     self.searchWord = dish;
+            //     self.fnProductList();
+            //     self.searchWord = "";
+            // }
         },
         mounted() {
             var self = this;

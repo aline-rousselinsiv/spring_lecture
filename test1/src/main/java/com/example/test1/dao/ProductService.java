@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.ProductMapper;
+import com.example.test1.model.Menu;
 import com.example.test1.model.Product;
 
 @Service
@@ -18,8 +19,10 @@ public class ProductService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		List <Product> list = productMapper.productList(map);
+		List <Menu> menuList = productMapper.selectMenuList(map);
 		
 		resultMap.put("list", list);
+		resultMap.put("menuList", menuList);
 		resultMap.put("result", "success");
 		return resultMap;
 	}
