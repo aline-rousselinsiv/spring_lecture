@@ -9,7 +9,7 @@ public class MapController {
 	
 	@RequestMapping("/map.do") 
     public String product(Model model) throws Exception{
-        return "/map/map1";
+        return "/map/map2";
     }
 
 }
