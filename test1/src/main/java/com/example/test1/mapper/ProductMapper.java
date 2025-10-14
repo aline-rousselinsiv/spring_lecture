@@ -16,5 +16,14 @@ public interface ProductMapper {
 	// 메뉴 목록
 	List <Menu> selectMenuList(HashMap<String, Object> map);
 	
+	// 음식 등록
+	int insertFood (HashMap<String, Object> map);
+	
+	// 첨부파일 (이미지) 업로드	
+	int insertFoodImg(HashMap<String, Object> map);
+	
+	// 음식 상세 정보
+	Product selectProduct(HashMap<String, Object> map);
+	
 	
 }

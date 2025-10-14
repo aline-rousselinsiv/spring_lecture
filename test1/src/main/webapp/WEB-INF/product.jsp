@@ -8,8 +8,14 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="/js/page-change.js"></script>
     <title>쇼핑몰 헤더</title>
     <link rel="stylesheet" href="/css/product-style.css">
+    <style>
+        a {
+            text-decoration: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -33,8 +39,8 @@
                 </ul>
             </nav>
             <div class="search-bar">
-                <input @keyup.enter="fnProductList" v-model="searchWord" type="text" placeholder="상품을 검색하세요...">
-                <button @click="fnProductList">검색</button>
+                <input @keyup.enter="fnProductList('', '')" v-model="searchWord" type="text" placeholder="상품을 검색하세요...">
+                <button @click="fnProductList('', '')">검색</button>
             </div>
             <div class="login-btn">
                 <button>로그인</button>
@@ -44,13 +50,17 @@
         <main>
             <section class="product-list">
                 <!-- 제품 항목 -->
-                <div class="product-item" v-for="item in productList">
-                    <img :src="item.filePath">
-                    <h3>{{item.foodName}}</h3>
-                    <p>{{item.foodInfo}}</p>
-                    <p class="price">₩{{item.price.toLocaleString()}}</p>
-                </div>
-
+                 
+                    <div class="product-item" v-for="item in productList">
+                        <a @click="fnView(item.foodNo)" href="javascript:;">
+                            <img :src="item.filePath">
+                            <h3>{{item.foodName}}</h3>
+                            <p>{{item.foodInfo}}</p>
+                            <p class="price">₩{{item.price.toLocaleString()}}</p>
+                        </a>
+                    </div>
+                 
+                
             </section>
         </main>
     </div>
@@ -85,17 +95,14 @@
                         self.menuList = data.menuList;
                     }
                 });
+            },
+            fnView: function(foodNo){
+                pageChange("product/view.do", {foodNo : foodNo});
             }
-            // fnSelectDish : function(dish){
-            //     var self = this;
-            //     self.searchWord = dish;
-            //     self.fnProductList();
-            //     self.searchWord = "";
-            // }
         },
         mounted() {
             var self = this;
-            self.fnProductList();
+            self.fnProductList('','');
         }
     });
     app.mount('#app');

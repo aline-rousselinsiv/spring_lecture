@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Product {
+	private int foodNo;
 	private String foodName;
 	private int price;
 	private String foodKind;
@@ -11,6 +12,7 @@ public class Product {
 	private String filePath;
 	private String fileName;
 	private String thumbnailYn;
-	
+	private int menuPart;
+	private int menuNo;
 	
 }

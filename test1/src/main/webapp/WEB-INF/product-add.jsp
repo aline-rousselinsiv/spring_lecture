@@ -17,19 +17,56 @@
         th{
             background-color: beige;
         }
-        tr:nth-child(even){
-            background-color: azure;
-        }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-         <table>
-            <tr v-for="item in menuList">
-                <th v-if="item.depth == 1 " >{{item.menuName}}</th>
-            </tr>
-         </table>
+         <div>
+            <table>
+                <tr >
+                    <th>카테고리</th>
+                    <td>
+                        <select v-model="menuPart">
+                            <option :value="item.menuNo" v-for="item in menuList">{{item.menuName}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>제품번호</th>
+                    <td>
+                        <input type="text" v-model="menuNo">
+                    </td>
+                </tr>
+                <tr >
+                    <th>음식명</th>
+                    <td>
+                        <input type="text" v-model="foodName">
+                    </td>
+                </tr>
+                <tr >
+                    <th>음식 설명</th>
+                    <td>
+                        <textarea v-model="foodInfo" cols="25" rows="5"></textarea>
+                    </td>
+                </tr>
+                <tr >
+                    <th>가격</th>
+                    <td>
+                        <input type="text" v-model="price">
+                    </td>
+                </tr>
+                <tr >
+                    <th>이미지</th>
+                    <td>
+                        <input type="file" id="file1" name="file1" accept=".jpg, .png">
+                    </td>
+                </tr>
+            </table>
+         </div>
+         <div>
+            <button @click="fnAddProduct">제품 등록</button>
+         </div>
     </div>
 </body>
 </html>
@@ -39,29 +76,79 @@
         data() {
             return {
                 // 변수 - (key : value)
-                menuList : []
+                menuList : [],
+                foodName: "",
+                foodInfo : "",
+                price : "",
+                menuPart : "10",
+                menuNo : ""
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnProductList: function() {
+            fnMenuList: function() {
                 var self = this;
-                var nparmap = {};
+                var param = {
+                    depth : 1
+                };
                 $.ajax({
-                    url: "/product/list.dox",
+                    url: "/product/menu.dox",
                     dataType: "json",
                     type: "POST",
-                    data: nparmap,
+                    data: param,
                     success: function (data) {
                         console.log(data);
                         self.menuList = data.menuList;
                     }
                 });
+            },
+            fnAddProduct: function(){
+                var self = this;
+                var param = {
+                    menuPart : self.menuPart,
+                    menuNo : self.menuNo,
+                    foodName : self.foodName,
+                    foodInfo : self.foodInfo,
+                    price : self.price
+                };
+                $.ajax({
+                    url: "/product/add.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        if(data.result == "success"){
+                            console.log(data);
+                            var form = new FormData();
+                            form.append( "file1",  $("#file1")[0].files[0] );
+                            form.append( "foodNo",  data.foodNo); // 임시 pk
+                            self.upload(form); 
+
+                            alert("제품 등록 되었습니다!");
+                            location.href="/product.do";
+                        } else {
+                            alert("오류가 발생했습니다.");
+                        }
+                    }
+                });
+            },
+            upload : function(form){
+                var self = this;
+                $.ajax({
+                    url : "/product/fileUpload.dox" // need to change the address
+                    , type : "POST"
+                    , processData : false
+                    , contentType : false
+                    , data : form
+                    , success:function(response) { 
+                        console.log(data);
+                    }	           
+                });
             }
         },
         mounted() {
             var self = this;
-            self.fnProductList();
+            self.fnMenuList();
         }
     });
     app.mount('#app');
