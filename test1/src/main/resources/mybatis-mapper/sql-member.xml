@@ -6,7 +6,8 @@
 	<select id="memberLogin" parameterType="hashmap" resultType="com.example.test1.model.Member">
 		SELECT *
 		FROM TBL_USER
-		WHERE USERID = #{id} AND PASSWORD = #{pwd}
+		WHERE USERID = #{id}
+		<!-- AND PASSWORD = #{pwd} -->
 	</select>
 	<select id="memberCheck" parameterType="hashmap" resultType="com.example.test1.model.Member">
 		SELECT *
@@ -14,8 +15,8 @@
 		WHERE USERID = #{id}
 	</select>
 	<insert id="memberJoin" parameterType="hashmap">
-		INSERT INTO TBL_USER (USERID, PASSWORD, NAME, ADDRESS, PHONE, GENDER, STATUS, CDATETIME, UDATETIME)
-		VALUES(#{id}, #{pwd}, #{name}, #{addr}, #{phone}, #{gender}, #{status}, SYSDATE, SYSDATE)
+		INSERT INTO TBL_USER (USERID, PASSWORD, NAME, ADDRESS, PHONE, GENDER, STATUS, CDATETIME, UDATETIME, CNT)
+		VALUES(#{id}, #{pwd}, #{name}, #{addr}, #{phone}, #{gender}, #{status}, SYSDATE, SYSDATE, 0)
 	</insert>
 	
 	<select id="selectMemberList" parameterType="hashmap" resultType="com.example.test1.model.Member">
