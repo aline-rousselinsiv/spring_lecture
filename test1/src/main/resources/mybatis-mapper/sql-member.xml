@@ -47,6 +47,19 @@
 		WHERE USERID = #{id}
 	</update>
 	
+	<select id="memberAuth" parameterType="hashmap" resultType="com.example.test1.model.Member">
+		SELECT *
+		FROM TBL_USER
+		WHERE USERID = #{userId} AND NAME = #{userName} AND REPLACE(PHONE, '-', '') = REPLACE(#{userNum}, '-', '')
+	</select>
+	
+	<update id="pwdChange" parameterType="hashmap">
+		UPDATE TBL_USER
+		SET 
+			PASSWORD = #{newPwd1}
+		WHERE USERID = #{userId}
+	</update>
+	
 </mapper>
 
 

@@ -46,6 +46,12 @@ public class MemberController {
         return "/mgr/member-view";
     }
 	
+	@RequestMapping("/member/pwd.do") 
+    public String pwd(Model model) throws Exception{
+		
+        return "/member/pwd";
+    }
+	
 	@RequestMapping("/addr.do") 
     public String addr(Model model) throws Exception{
 
@@ -88,6 +94,26 @@ public class MemberController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println(map);
 		resultMap = memberService.addMember(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/member/pwd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String pwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println(map);
+		resultMap = memberService.getAuth(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/member/pwd/change.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String pwdChange(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println(map);
+		resultMap = memberService.pwdChange(map);
 		
 		return new Gson().toJson(resultMap);
 	}

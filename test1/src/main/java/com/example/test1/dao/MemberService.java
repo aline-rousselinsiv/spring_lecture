@@ -193,5 +193,37 @@ public class MemberService {
 		
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> getAuth(HashMap<String, Object> map){
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Member member = memberMapper.memberAuth(map);
+		
+		if(member != null) {
+			resultMap.put("result", "success");
+		} else {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> pwdChange(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		Member member = memberMapper.memberLogin(map);
+		boolean isPwdSame = passwordEncoder.matches((String) map.get("newPwd1"), member.getPassword());
+		
+		if(isPwdSame == true) {
+			resultMap.put("result", "fail");
+			resultMap.put("message", "비밀번호가 이전과 동일합니다.");
+		} else {
+			String hashPwd = passwordEncoder.encode((String) map.get("newPwd1"));
+			map.put("newPwd1", hashPwd);
+			int cnt = memberMapper.pwdChange(map);
+			resultMap.put("result", "success");
+			resultMap.put("message", "비밀번호가 수정되었습니다!");
+		}
+		return resultMap;
+	}
 
 }

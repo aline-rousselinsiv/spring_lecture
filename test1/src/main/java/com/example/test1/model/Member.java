@@ -15,5 +15,5 @@ public class Member {
 	private String phone;
 	private int cnt;
 	private String cBirth;
-	
+	private String newPwd1;
 }
