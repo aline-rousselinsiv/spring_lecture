@@ -17,20 +17,43 @@
         th{
             background-color: beige;
         }
-        tr:nth-child(even){
-            background-color: azure;
+        th{
+            width:150px;
+        }
+        td {
+            width: 300px;
         }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-         {{sessionId}}님 환영합니다! 메인페이지 입니다!
          <div>
-            <!-- <a href="/board-list.do"><button>게시판으로 이동</button></a> -->
-            <a href="/bbs/list.do"><button>게시판으로 이동</button></a>
-            <a href="/product.do"><button >제품 목록으로 이동</button></a>
-            <button @click="fnLogout">로그아웃</button>
+            <table>
+                <tr>
+                    <th>제목</th>
+                    <td>
+                        <input v-model="title" type="text">
+                    </td>
+                </tr>
+                <tr>
+                    <th>작성자</th>
+                    <td>{{sessionId}}</td>
+                </tr>
+                <tr>
+                    <th>파일첨부</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>내용</th>
+                    <td>
+                        <textarea v-model="contents" cols="30" rows="10"></textarea>
+                    </td>
+                </tr>
+            </table>
+         </div>
+         <div>
+            <button @click="fnSavePost">등록</button>
          </div>
     </div>
 </body>
@@ -42,23 +65,32 @@
             return {
                 // 변수 - (key : value)
                 sessionId : "${sessionId}",
-                sessionName : "${sessionName}",
-                sessionStatus : "${sessionStatus}"
+                title : self.title,
+                contents : self.contents
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnLogout: function(){
+            fnSavePost: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    title : self.title,
+                    contents : self.contents,
+                    userId : self.sessionId
+                };
                 $.ajax({
-                    url: "/member/logout.dox",
+                    url: "/bbs/save.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert(data.msg);
-                        location.href="/member/login.do"
+                        if(data.result = "success"){
+                            alert("등록되었습니다!");
+                            location.href="/bbs/list.do";
+                        } else {
+                            alert("오류가 발생했습니다.");
+                        }
+
                     }
                 });
             }

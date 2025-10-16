@@ -58,7 +58,8 @@ public class MemberService {
 					session.setAttribute("sessionName", member.getName());
 					session.setAttribute("sessionStatus", member.getStatus());
 					if(member.getStatus().equals("A")) {
-						resultMap.put("url", "/mgr/member/list.do");
+//						resultMap.put("url", "/mgr/member/list.do");
+						resultMap.put("url", "/bbs/list.do");
 					} else {
 						resultMap.put("url", "/main.do");
 					}
