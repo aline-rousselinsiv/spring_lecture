@@ -213,7 +213,7 @@ public class MemberService {
 		Member member = memberMapper.memberLogin(map);
 		boolean isPwdSame = passwordEncoder.matches((String) map.get("newPwd1"), member.getPassword());
 		
-		if(isPwdSame == true) {
+		if(isPwdSame) {
 			resultMap.put("result", "fail");
 			resultMap.put("message", "비밀번호가 이전과 동일합니다.");
 		} else {

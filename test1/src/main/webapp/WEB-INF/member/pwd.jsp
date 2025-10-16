@@ -7,6 +7,7 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <style>
         table, tr, td, th{
             border : 1px solid black;
@@ -56,6 +57,7 @@
 </html>
 
 <script>
+    IMP.init("imp87747305");
     const app = Vue.createApp({
         data() {
             return {
@@ -89,8 +91,9 @@
                     data: param,
                     success: function (data) {
                         if(data.result == "success"){
-                            alert("인증되었습니다!");
-                            self.authFlg = true;
+                            // alert("인증되었습니다!");
+                            self.fnCertification();
+                            // self.authFlg = true;
                         } else if (data.result == "fail") {
                             self.authFlg = false;
                             alert("회원 정보를 확인해주세요.");
@@ -117,11 +120,34 @@
                     success: function (data) {
                         if(data.result = "success"){
                             alert(data.message);
-                        } else if(data.result == "fail") {
+                        } else {
                             alert(data.message);
                         }
                     }
                 });
+            },
+            fnCertification: function(){
+                let self = this;
+                IMP.certification(
+                    {
+                        // param
+                        channelKey: "channel-key-7aaddea6-8b80-49fe-a044-c3a64ee79f4c",
+                        merchant_uid: "merchant_" + new Date().getTime(), // 주문 번호
+                    },
+                    function (rsp) {
+                        // callback
+                        if (rsp.success) {
+                        // 인증 성공 시 로직
+                            alert("인증 성공!");
+                            console.log(rsp);
+                            self.authFlg = true;
+                        } else {
+                        // 인증 실패 시 로직
+                            alert("인증 실패!");
+                            console.log(rsp);
+                        }
+                    },
+                );
             }
         }, // methods
         mounted() {

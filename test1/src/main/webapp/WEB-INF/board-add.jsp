@@ -105,7 +105,7 @@
                         form.append( "file1",  $("#file1")[0].files[0] );
                         form.append( "boardNo",  data.boardNo); // 임시 pk
                         self.upload(form); 
-                        // location.href="board-list.do";
+                        location.href="board-list.do";
                     }
                 });
             },

@@ -10,6 +10,7 @@ public class Board {
 	private int cnt;
 	private String cdate;
 	private String contents;
+	private String contents2;
 	private String commentCnt;
 	
 	private String fileNo;
