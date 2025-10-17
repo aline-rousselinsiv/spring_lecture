@@ -32,4 +32,10 @@ public interface MemberMapper {
 	
 	//비밀번호 변경
 	int pwdChange(HashMap<String, Object> map);
+	
+	// 사용자 삭제
+	int deleteUser(HashMap<String, Object> map);
+	
+	// 사용자 전체 개수
+	int selectUserCnt(HashMap<String, Object> map);
 }

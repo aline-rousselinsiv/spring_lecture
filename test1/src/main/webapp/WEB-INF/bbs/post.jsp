@@ -42,7 +42,7 @@
                 </tr>
                 <tr>
                     <th>파일첨부</th>
-                    <td></td>
+                    <td><input type="file" id="file1" name="file1" accept=".jpg, .png"></td> 
                 </tr>
                 <tr>
                     <th>내용</th>
@@ -84,7 +84,11 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        if(data.result = "success"){
+                        if(data.result == "success"){
+                            // var form = new FormData();
+                            // form.append( "file1",  $("#file1")[0].files[0] );
+                            // form.append( "bbsNum",  data.bbsNum); // 임시 pk
+                            // self.upload(form); 
                             alert("등록되었습니다!");
                             location.href="/bbs/list.do";
                         } else {
@@ -93,7 +97,20 @@
 
                     }
                 });
-            }
+            },
+            // upload : function(form){
+            //     var self = this;
+            //     $.ajax({
+            //         url : "/picUpload.dox"
+            //         , type : "POST"
+            //         , processData : false
+            //         , contentType : false
+            //         , data : form
+            //         , success:function(response) { 
+            //             console.log(response);
+            //         }	           
+            //     });
+            // }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분

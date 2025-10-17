@@ -170,7 +170,9 @@ public class MemberService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			List<Member> list =  memberMapper.selectMemberList(map);
+			int cnt = memberMapper.selectUserCnt(map);
 			resultMap.put("list", list);
+			resultMap.put("cnt", cnt);
 			resultMap.put("result", "success");
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -226,5 +228,20 @@ public class MemberService {
 		}
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> deleteUser(HashMap<String, Object> map){
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			int cnt  =  memberMapper.deleteUser(map);
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			// TODO: handle exception
+			resultMap.put("result", "fail");
+			System.out.println(e.getMessage());
+		}
+		
+		return resultMap;
+	}
+	
 
 }

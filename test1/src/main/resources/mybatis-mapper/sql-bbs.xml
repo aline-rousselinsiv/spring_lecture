@@ -2,13 +2,82 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.test1.mapper.UserMapper">
-	<select id="userLogin" parameterType="hashmap" resultType="com.example.test1.model.User">
-		SELECT *
-		FROM TBL_USER
-		WHERE USERID = #{userId} AND PASSWORD = #{pwd}
+<mapper namespace="com.example.test1.mapper.BbsMapper">
+	<select id="selectBbsList" parameterType="hashmap" resultType="com.example.test1.model.Bbs">
+		SELECT * FROM TBL_BBS
+		WHERE 1 = 1
+		<if test="searchOption == 'all'">
+			AND (
+				TITLE LIKE '%' || #{keyword} || '%'
+				OR USERID LIKE '%' || #{keyword} || '%'
+				) 
+		</if>
+		<if test="searchOption == 'title'">
+			AND TITLE LIKE '%' || #{keyword} || '%' 
+		</if>
+		<if test="searchOption == 'id'">
+			AND USERID LIKE '%' || #{keyword} || '%' 
+		</if>
+		ORDER BY BBS_NUM DESC
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
-</mapper>
+	
+	<select id="bbsCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) AS CNT
+		FROM TBL_BBS
+		
+		WHERE 1=1
+		<if test="searchOption == 'all'">
+			AND (
+				TITLE LIKE '%' || #{keyword} || '%'
+				OR USERID LIKE '%' || #{keyword} || '%'
+				) 
+		</if>
+		<if test="searchOption == 'title'">
+			AND TITLE LIKE '%' || #{keyword} || '%' 
+		</if>
+		<if test="searchOption == 'id'">
+			AND USERID LIKE '%' || #{keyword} || '%' 
+		</if>
+	</select>
+	
+	<insert id="insertPost" parameterType="hashmap">
+		INSERT INTO TBL_BBS
+		VALUES(BBS_SEQ.NEXTVAL, #{title}, #{contents}, 0, #{userId}, SYSDATE, SYSDATE)
+	</insert>
+	
+	<delete id="deletePost" parameterType="hashmap">
+		DELETE FROM TBL_BBS
+		WHERE BBS_NUM = #{selectItem}
+	</delete>
+	
+	<select id="selectBbsInfo" parameterType="hashmap" resultType="com.example.test1.model.Bbs">
+		SELECT * FROM TBL_BBS
+		WHERE BBS_NUM = #{bbsNum}
+	</select>
+	
+	<update id="updatePost" parameterType="hashmap">
+		UPDATE TBL_BBS
+		SET 
+			TITLE = #{title},
+			CONTENTS = #{contents}
+		WHERE BBS_NUM = #{bbsNum}	
+	</update>
+	
+	<delete id="deleteBbsList" parameterType="hashmap">
+		DELETE FROM TBL_BBS
+		WHERE BBS_NUM IN
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<insert id="insertBbsImg" parameterType="hashmap">
+		INSERT INTO TBL_BBS_FILE
+		VALUES(BBSFILE_SEQ.NEXTVAL, #{bbsNum}, #{path}, #{fileName}, #{orgName}, #{size}, #{ext})
+	</insert>
+	
+</mapper> 
 
 
 

@@ -37,6 +37,7 @@ public class BbsService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			int cnt  =  bbsMapper.insertPost(map);
+			resultMap.put("bbsNum", map.get("bbsNum"));
 			resultMap.put("result", "success");
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -88,6 +89,25 @@ public class BbsService {
 		}
 		
 		return resultMap;
+	}
+	
+	public HashMap<String, Object> removeBbsList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			int cnt = bbsMapper.deleteBbsList(map);
+			resultMap.put("result", "success");
+		} catch (Exception e) {
+			resultMap.put("result", "fail");
+			System.out.println(e.getMessage());
+		}
+		
+		return resultMap;
+	}
+	
+	public void addBbsImg(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		int cnt = bbsMapper.insertBbsImg(map);
 	}
 	
 }

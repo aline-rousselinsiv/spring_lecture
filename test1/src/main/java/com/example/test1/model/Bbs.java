@@ -11,4 +11,8 @@ public class Bbs {
 	private String userid;
 	private String cDateTime;
 	private int cnt;
+	
+	private String fileNo;
+	private String filePath;
+	private String fileName;
 }

@@ -27,4 +27,10 @@ public interface BbsMapper {
 	
 	// 게시글 수정
 	int updatePost(HashMap<String, Object> map);
+	
+	// 게시글 목록 삭제
+	int deleteBbsList(HashMap<String, Object> map);
+	
+	// 첨부파일 (이미지) 업로드	
+	int insertBbsImg(HashMap<String, Object> map);
 }

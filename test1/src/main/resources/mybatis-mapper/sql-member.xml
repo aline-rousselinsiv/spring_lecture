@@ -29,6 +29,11 @@
 		        SUBSTR(BIRTH, 3, 2) || '.' || SUBSTR(BIRTH, 5, 2) || '.' || SUBSTR(BIRTH, 7, 2)
 		    ) CBIRTH
 		FROM TBL_USER U
+		WHERE
+			NAME LIKE '%' || #{keyword} || '%'
+			OR USERID LIKE '%' || #{keyword} || '%'
+			OR NICKNAME LIKE '%' || #{keyword} || '%'
+		OFFSET #{page} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
 	<update id="cntIncrease" parameterType="hashmap">
@@ -59,6 +64,20 @@
 			PASSWORD = #{newPwd1}
 		WHERE USERID = #{userId}
 	</update>
+	
+	<delete id="deleteUser" parameterType="hashmap">
+		DELETE FROM TBL_USER
+		WHERE USERID = #{selectId}
+	</delete>
+	
+	<select id="selectUserCnt" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) AS CNT
+		FROM TBL_USER
+		WHERE
+			NAME LIKE '%' || #{keyword} || '%'
+			OR USERID LIKE '%' || #{keyword} || '%'
+			OR NICKNAME LIKE '%' || #{keyword} || '%'
+	</select>
 	
 </mapper>
 
