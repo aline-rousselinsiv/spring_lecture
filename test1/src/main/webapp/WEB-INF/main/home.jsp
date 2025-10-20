@@ -25,7 +25,7 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-         {{sessionId}}님 환영합니다! 메인페이지 입니다!
+         {{sessionName}}님 환영합니다! 메인페이지 입니다!
          <div>
             <!-- <a href="/board-list.do"><button>게시판으로 이동</button></a> -->
             <a href="/bbs/list.do"><button>게시판으로 이동</button></a>
@@ -43,7 +43,8 @@
                 // 변수 - (key : value)
                 sessionId : "${sessionId}",
                 sessionName : "${sessionName}",
-                sessionStatus : "${sessionStatus}"
+                sessionStatus : "${sessionStatus}",
+                code : ""
             };
         },
         methods: {
@@ -61,11 +62,32 @@
                         location.href="/member/login.do"
                     }
                 });
+            },
+            fnKakao: function(){
+                let self = this;
+                let param = {
+                    code : self.code
+                };
+                $.ajax({
+                    url: "/kakao.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        console.log(data);
+                        self.sessionName = data.properties.nickname;
+                    }
+                });
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            const queryParams = new URLSearchParams(window.location.search);
+            self.code = queryParams.get('code') || '';
+            if(self.code != ""){
+                self.fnKakao();
+            } 
         }
     });
 
